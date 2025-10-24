@@ -3,14 +3,29 @@ const prompt = require('prompt-sync')(); // importa o pacote para entrada no ter
 let notas = [];
 let bimestres = [];
 
-// Coletar 8 notas do aluno
+// Coletar 8 notas do aluno com validação
 for (let i = 0; i < 8; i++) {
-    let nota = parseFloat(prompt(`Digite a nota ${i + 1}: `));
-    notas.push(nota);
+    let nota;
+    let entradaValida = false;
+    
+    // Loop para garantir que a entrada é um número válido
+    while (!entradaValida) {
+        let entrada = prompt(`Digite a nota ${i + 1}: `);
+        nota = parseFloat(entrada);
+        
+        // Verifica se é um número e não é NaN
+        if (!isNaN(nota)) {
+            notas.push(nota);
+            entradaValida = true;
+        } else {
+            console.log("Entrada inválida. Por favor, digite um número.");
+        }
+    }
 }
 
 // Calcular médias dos 4 bimestres
 for (let i = 0; i < 4; i++) {
+    // Pega as notas nas posições i*2 e i*2 + 1 (ex: 0 e 1, 2 e 3, etc.)
     let mediaBimestre = (notas[i * 2] + notas[i * 2 + 1]) / 2;
     bimestres.push(mediaBimestre);
 }
@@ -33,3 +48,12 @@ console.log(`4º Bimestre: ${bimestres[3].toFixed(1)}`);
 console.log(`2º Semestre: ${semestre2.toFixed(1)}`);
 console.log("----------------------");
 console.log(`Média Final: ${mediaFinal.toFixed(1)}`);
+
+// Adicionando uma checagem de aprovação (opcional)
+if (mediaFinal >= 7) {
+    console.log("Situação: APROVADO");
+} else if (mediaFinal >= 5) {
+    console.log("Situação: RECUPERAÇÃO");
+} else {
+    console.log("Situação: REPROVADO");
+}
